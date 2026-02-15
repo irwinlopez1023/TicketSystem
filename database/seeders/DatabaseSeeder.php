@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Database\Seeders\Ticket\Category;
+use Database\Seeders\Ticket\CategorySeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-            Category::class,
+            CategorySeeder::class,
         ]);
         // User::factory(10)->create();
 
