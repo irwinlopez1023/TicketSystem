@@ -59,6 +59,10 @@ class Ticket extends Model
     {
         return $this->belongsTo('App\Models\User', 'user_id', 'id');
     }
+
+    public function category(): BelongsTo {
+        return $this->belongsTo('App\Models\Ticket\Category', 'category_id', 'id');
+    }
     public function assignee(): BelongsTo
     {
         return $this->belongsTo('App\Models\User', 'assignee_id', 'id');

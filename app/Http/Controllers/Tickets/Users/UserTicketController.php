@@ -7,7 +7,8 @@ use App\Models\Ticket\Category;
 use Illuminate\Http\Request;
 use App\Models\Ticket\Ticket;
 use Illuminate\Support\Facades\Session;
-
+use App\Policies\TicketPolicy;
+Use App\Models\User;
 class UserTicketController extends Controller
 {
     public function index()
@@ -17,20 +18,15 @@ class UserTicketController extends Controller
         return view('tickets.users.index',compact('tickets'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
+        $this->authorize('create', Ticket::class);
         $categories = Category::all();
         return view('tickets.users.create', compact('categories'));
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
+        $this->authorize('create', Ticket::class);
         $request->validate([
             'title' => 'required|min:10|max:255',
             'description' => 'required|min:10',
@@ -55,7 +51,9 @@ class UserTicketController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $ticket = Ticket::findOrFail($id);
+        $this->authorize('view', [Ticket::class , $ticket]);
+        return view('tickets.users.show', compact('ticket'));
     }
 
     /**

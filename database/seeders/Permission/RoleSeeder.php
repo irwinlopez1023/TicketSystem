@@ -18,6 +18,7 @@ class RoleSeeder extends Seeder
             ->forgetCachedPermissions();
 
         Permission::firstOrCreate(['name' => 'tickets.view']);
+        Permission::firstOrCreate(['name' => 'tickets.view.all']);
         Permission::firstOrCreate(['name' => 'tickets.create']);
         Permission::firstOrCreate(['name' => 'tickets.delegate']);
         Permission::firstOrCreate(['name' => 'tickets.reply']);
@@ -30,7 +31,7 @@ class RoleSeeder extends Seeder
         $user = Role::firstOrCreate(['name' => 'user']);
 
         $admin->givePermissionTo(Permission::all());
-        $support->givePermissionTo(['tickets.delegate', 'tickets.reply', 'tickets.view']);
+        $support->givePermissionTo(['tickets.delegate', 'tickets.reply', 'tickets.view','tickets.view.all']);
         $user->givePermissionTo(['tickets.view', 'tickets.create', 'tickets.reply']);
 
 
