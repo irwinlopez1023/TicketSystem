@@ -4,7 +4,9 @@ namespace App\Models\Ticket;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\User;
 
 class Ticket extends Model
 {
@@ -30,7 +32,8 @@ class Ticket extends Model
         return match($this->status) {
             'open' => 'info',
             'in progress' => 'warning',
-            'closed' => 'success',
+            'answered' => 'warning',
+            'closed' => 'danger',
             default => 'secondary'
         };
     }
@@ -50,6 +53,7 @@ class Ticket extends Model
         return match($this->status){
             'open' => 'Abierto',
             'in progress' => 'En proceso',
+            'answered' => 'Respondido',
             'closed' => 'Cerrado',
             default => 'Desconocido'
         };
@@ -57,14 +61,36 @@ class Ticket extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo('App\Models\User', 'user_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function replies(): HasMany
+    {
+        return $this->hasMany(TicketReply::class, 'ticket_id');
+    }
+    public function lastReply()
+    {
+        return $this->hasOne(TicketReply::class)->latest();
+    }
+
+    public function isClosed(): bool
+    {
+        return $this->status === 'closed';
+    }
+    public function isWaitingForSupport(User $user): bool
+    {
+        $lastReply = $this->lastReply;
+        if (!$lastReply) {
+            return false;
+        }
+        return $lastReply->user_id === $user->id;
     }
 
     public function category(): BelongsTo {
-        return $this->belongsTo('App\Models\Ticket\Category', 'category_id', 'id');
+        return $this->belongsTo(Category::class, 'category_id', 'id');
     }
     public function assignee(): BelongsTo
     {
-        return $this->belongsTo('App\Models\User', 'assignee_id', 'id');
+        return $this->belongsTo(User::class, 'assignee_id', 'id');
     }
 }

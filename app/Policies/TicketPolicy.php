@@ -27,5 +27,21 @@ class TicketPolicy
     {
         return $user->can('tickets.create');
     }
+    public function reply(User $user, Ticket $ticket)
+    {
+        if ($user->can('tickets.view.all') && $user->can('tickets.reply')) {
+            return true;
+        }
+
+        if ($ticket->user_id !== $user->id) {
+            return false;
+        }
+
+        if ($ticket->isWaitingForSupport($user)) {
+            return false;
+        }
+
+        return $user->can('tickets.reply');
+    }
 
 }

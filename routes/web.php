@@ -5,6 +5,8 @@ use App\Http\Controllers\Tickets\Users\UserTicketController;
 use Illuminate\Support\Facades\Route;
 
 Route::Resource('tickets', UserTicketController::class)->middleware('auth')->names('user.tickets');
+Route::post('tickets/{ticket}/reply', [UserTicketController::class, 'reply'])->middleware('auth')->name('user.tickets.reply');
+Route::put('tickets/{ticket}/close', [UserTicketController::class, 'close'])->middleware('auth')->name('user.tickets.close');
 
 
 

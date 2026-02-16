@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Tickets\Users;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ticket\Category;
+use App\Models\Ticket\TicketReply;
 use Illuminate\Http\Request;
 use App\Models\Ticket\Ticket;
 use Illuminate\Support\Facades\Session;
@@ -46,6 +47,41 @@ class UserTicketController extends Controller
 
     }
 
+    public function reply(Request $request, string $id)
+    {
+
+        $ticket = Ticket::findOrFail($id);
+
+        $this->authorize('reply', [Ticket::class, $ticket]);
+        $request->validate([
+            'message' => 'required|min:10',
+        ]);
+
+
+        if (Auth()->user()->id != $ticket->user_id){
+            $ticket->status = 'answered';
+            $ticket->save();
+        }
+
+        $reply = TicketReply::create([
+            'ticket_id' => $ticket->id,
+            'user_id' => auth()->id(),
+            'message' => $request->message
+        ]);
+
+        return redirect()->route('user.tickets.show', $ticket->id)->with('success', 'Respuesta enviada con éxito');
+    }
+
+    public function close(Request $request, string $id)
+    {
+        $ticket = Ticket::findOrFail($id);
+        $this->authorize('reply', [Ticket::class, $ticket]);
+
+        $ticket->status = "closed";
+        $ticket->save();
+        return redirect()->route('user.tickets.show', $ticket->id)->with('success', 'Ticket cerrado.');
+
+    }
     /**
      * Display the specified resource.
      */
@@ -53,6 +89,7 @@ class UserTicketController extends Controller
     {
         $ticket = Ticket::findOrFail($id);
         $this->authorize('view', [Ticket::class , $ticket]);
+
         return view('tickets.users.show', compact('ticket'));
     }
 
