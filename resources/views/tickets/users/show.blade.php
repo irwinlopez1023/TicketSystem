@@ -2,6 +2,8 @@
     <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-lg-10">
+            <x-alert-session-success />
+            <x-alert-errors />
             <div class="card shadow-sm mb-3">
                 <div class="card-body py-3">
                     <div class="d-flex justify-content-between align-items-center">

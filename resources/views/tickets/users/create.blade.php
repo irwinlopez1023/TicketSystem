@@ -2,16 +2,9 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
+                <x-alert-session-success />
+                <x-alert-errors />
                 <h1>Crear ticket</h1>
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
     <form class="form-control" method="POST" action="{{ route('user.tickets.store') }}">
         @csrf
         <div class="mb-3">

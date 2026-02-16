@@ -15,7 +15,7 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         TicketCategory::create([
-            'name' => 'Other'
+            'name' => 'Otros'
         ]);
     }
 }
