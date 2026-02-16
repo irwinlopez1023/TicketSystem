@@ -68,24 +68,11 @@ class Ticket extends Model
     {
         return $this->hasMany(TicketReply::class, 'ticket_id');
     }
-    public function lastReply()
-    {
-        return $this->hasOne(TicketReply::class)->latest();
-    }
 
     public function isClosed(): bool
     {
         return $this->status === 'closed';
     }
-    public function isWaitingForSupport(User $user): bool
-    {
-        $lastReply = $this->lastReply;
-        if (!$lastReply) {
-            return false;
-        }
-        return $lastReply->user_id === $user->id;
-    }
-
     public function category(): BelongsTo {
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }

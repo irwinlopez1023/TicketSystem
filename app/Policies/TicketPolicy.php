@@ -29,19 +29,10 @@ class TicketPolicy
     }
     public function reply(User $user, Ticket $ticket)
     {
-        if ($user->can('tickets.view.all') && $user->can('tickets.reply')) {
-            return true;
-        }
-
-        if ($ticket->user_id !== $user->id) {
-            return false;
-        }
-
-        if ($ticket->isWaitingForSupport($user)) {
-            return false;
-        }
-
-        return $user->can('tickets.reply');
+        if (!$user->can('tickets.reply') || $ticket->isClosed()) return false;
+        if ($user->can('tickets.view.all')) return true;
+        if ($ticket->user_id !== $user->id || $ticket->status === "open") return false;
+        return true;
     }
 
 }

@@ -83,7 +83,7 @@
                 </div>
             </div>
 
-            @if($ticket->isWaitingForSupport(auth()->user()) && auth()->user()->id == $ticket->user_id)
+            @if($ticket->status == "open" && auth()->user()->id == $ticket->user_id)
                     <div class="alert alert-warning" role="alert">
                         Debes esperar a que el ticket sea contestado para poder responder.
                     </div>
