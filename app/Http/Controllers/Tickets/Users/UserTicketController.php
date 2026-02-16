@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Tickets\Users;
 use App\Http\Controllers\Controller;
 use App\Models\Ticket\Category;
 use Illuminate\Http\Request;
-
 use App\Models\Ticket\Ticket;
+use Illuminate\Support\Facades\Session;
 
 class UserTicketController extends Controller
 {
@@ -34,16 +34,19 @@ class UserTicketController extends Controller
         $request->validate([
             'title' => 'required|min:10|max:255',
             'description' => 'required|min:10',
-            'priority' => 'required|in:low,medium,high,urgent'
+            'priority' => 'required|in:low,medium,high,urgent',
+            'category_id' => 'required|exists:categories,id'
         ]);
 
         Ticket::create([
             'title' => $request->title,
             'description' => $request->description,
             'priority' => $request->priority,
+            'category_id' => $request->category_id,
             'user_id' => auth()->id()
         ]);
 
+        return redirect()->route('user.tickets.index')->with('success', 'Ticket creado con éxito');
 
     }
 

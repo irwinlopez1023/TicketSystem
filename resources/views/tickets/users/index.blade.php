@@ -1,5 +1,11 @@
 <x-bootstrap>
     <h1>Mis tickets</h1>
+    @if(session()->has('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
     @forelse ($tickets as $ticket)
         @if($loop->first)
        <table class="table table-striped table-responsive">
@@ -14,7 +20,7 @@
            <tbody>
            @endif
             <tr>
-                <td>{{ $ticket->title }}</td>
+                <td><a href="{{ route('user.tickets.show', $ticket->id) }}">{{ $ticket->title }}</a></td>
                 <td>{{ $ticket->description_short }}</td>
                 <td><x-badge :text="$ticket->status_label" :color="$ticket->status_color"></x-badge></td>
                 <td><x-badge :text="$ticket->priority_label" :color="$ticket->priority_color" />

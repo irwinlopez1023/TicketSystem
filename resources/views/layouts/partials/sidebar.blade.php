@@ -18,17 +18,21 @@
             ></button>
         </div>
 
-        <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="#">
-                        <svg class="bi" aria-hidden="true"><use xlink:href="#house-fill"></use></svg>
-                        Dashboard
-                    </a>
-                </li>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center gap-2" aria-current="page" href="{{ route('user.tickets.index') }}">
+                    <svg class="bi" aria-hidden="true"><use xlink:href="#house-fill"></use></svg>
+                    Inicio
+                </a>
+            </li>
 
 
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center gap-2" aria-current="page" href="{{ route('user.tickets.create') }}">
+                    <svg class="bi" aria-hidden="true"><use xlink:href="#house-fill"></use></svg>
+                    Crear ticket
+                </a>
+            </li>
 
-        </div>
     </div>
 </div>

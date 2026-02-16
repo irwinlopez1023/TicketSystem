@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Ticket extends Model
 {
     use SoftDeletes;
-    protected $fillable = ['title', 'description', 'status', 'priority','user_id','assignee_id'];
+    protected $fillable = ['title', 'description', 'status', 'priority','category_id','user_id','assignee_id'];
 
     public function getDescriptionShortAttribute(): string
     {

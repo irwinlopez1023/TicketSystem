@@ -14,6 +14,8 @@
         </div>
     @endif
 
+
+
     <form class="form-control" method="POST" action="{{ route('user.tickets.store') }}">
         @csrf
         <div class="mb-3">
@@ -36,7 +38,7 @@
         </div>
         <div class="mb-3">
             <label for="category" class="form-label">Categoría</label>
-            <select class="form-select" name="category" id="category" required>
+            <select class="form-select" name="category_id" id="category" required>
 
                 @foreach ($categories as $category)
                     <option value="{{ $category->id }}">{{ $category->name }}</option>

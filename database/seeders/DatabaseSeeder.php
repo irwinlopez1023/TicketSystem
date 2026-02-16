@@ -16,16 +16,33 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+    try {
+
 
         $this->call([
             CategorySeeder::class,
         ]);
-        // User::factory(10)->create();
 
-       /* User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        User::factory()->create([
+          'name' => 'Test User',
+          'email' => 'test@example.com',
+          'password' => bcrypt('test'),
         ]);
-       ]*/
+
+
+        User::factory()->create([
+            'name' => 'Admin User',
+            'email' => 'admin@example.com',
+            'password' => bcrypt('admin'),
+        ]);
+
+        User::factory(10)->create();
+
+
+
+    }catch (\Exception $exception){
+        print("Database seeding failed: {$exception->getMessage()}");
+    }
+
     }
 }
