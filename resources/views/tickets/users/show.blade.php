@@ -2,11 +2,8 @@
     <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-lg-10">
-
             <div class="card shadow-sm mb-3">
                 <div class="card-body py-3">
-
-                    {{-- Título --}}
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="mb-0 fw-semibold">
                             {{ $ticket->title }}
@@ -35,19 +32,22 @@
 
             <div class="card mb-4 shadow-sm">
                 <div class="card-header bg-light">
-                    <strong>Problema</strong>
-                </div>
-                <div class="card-body">
-                    {{ $ticket->description }}
-                </div>
-            </div>
-
-            <div class="card mb-4 shadow-sm">
-                <div class="card-header bg-light">
-                    <strong>Respuestas</strong>
+                    <strong>Ticket # {{ $ticket->id }}</strong>
                 </div>
 
                 <div class="card-body">
+
+                    <div class="d-flex mb-3 ">
+                        <div class="p-3 rounded bg-light border" style="max-width: 75%;">
+                            <div class="small mb-1 text-muted">
+                                <i class="bi bi-person"></i> {{ $ticket->user->name }}
+                                <span class="ms-2"> <i class="bi bi-clock"></i> {{ $ticket->created_at->diffForHumans() }} </span>
+                            </div>
+                            <div>
+                                {{ $ticket->description }}
+                            </div>
+                        </div>
+                    </div>
 
                     @forelse ($ticket->replies as $reply)
 
@@ -82,7 +82,6 @@
 
                 </div>
             </div>
-
 
             @if($ticket->isWaitingForSupport(auth()->user()) && auth()->user()->id == $ticket->user_id)
                     <div class="alert alert-warning" role="alert">

@@ -21,6 +21,7 @@ class RoleSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'tickets.view.all']);
         Permission::firstOrCreate(['name' => 'tickets.create']);
         Permission::firstOrCreate(['name' => 'tickets.delegate']);
+        Permission::firstOrCreate(['name' => 'tickets.climb']);
         Permission::firstOrCreate(['name' => 'tickets.reply']);
         Permission::firstOrCreate(['name' => 'tickets.update']);
         Permission::firstOrCreate(['name' => 'tickets.delete']);

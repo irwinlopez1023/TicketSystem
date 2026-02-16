@@ -14,7 +14,7 @@ class UserTicketController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::where('user_id', auth()->id())->get();
+        $tickets = Ticket::where('user_id', auth()->id())->orderBy('created_at', 'desc')->get();
 
         return view('tickets.users.index',compact('tickets'));
     }
@@ -59,7 +59,13 @@ class UserTicketController extends Controller
 
 
         if (Auth()->user()->id != $ticket->user_id){
+            if (empty($ticket->assignee_id)){
+                $ticket->assignee_id = Auth()->user()->id;
+            }
             $ticket->status = 'answered';
+            $ticket->save();
+        }else{
+            $ticket->status = 'open';
             $ticket->save();
         }
 
