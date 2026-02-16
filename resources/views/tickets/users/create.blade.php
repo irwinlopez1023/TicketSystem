@@ -1,21 +1,17 @@
 <x-bootstrap>
-
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <h1>Crear ticket</h1>
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-
-
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
     <form class="form-control" method="POST" action="{{ route('user.tickets.store') }}">
         @csrf
         <div class="mb-3">
@@ -26,7 +22,6 @@
             <label for="description" class="form-label">Descripción</label>
             <textarea class="form-control" name="description" id="description" rows="4" required minlength="10"></textarea>
         </div>
-
         <div class="mb-3">
             <label for="priority" class="form-label">Prioridad</label>
             <select class="form-select" name="priority" id="priority" required>
@@ -45,12 +40,9 @@
                 @endforeach
             </select>
         </div>
-
-
-
         <button type="submit" class="btn btn-primary">Crear ticket</button>
     </form>
             </div>
-    </div>
+        </div>
     </div>
 </x-bootstrap>

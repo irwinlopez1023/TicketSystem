@@ -39,5 +39,4 @@
             </div>
         </div>
     @endforelse
-
 </x-bootstrap>
