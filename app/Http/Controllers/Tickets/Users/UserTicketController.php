@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Tickets\Users;
 
+use App\Enums\TicketPriority;
+use App\Enums\TicketStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Ticket\Category;
 use App\Models\Ticket\TicketReply;
 use Illuminate\Http\Request;
 use App\Models\Ticket\Ticket;
+use Illuminate\Validation\Rules\Enum;
+
 class UserTicketController extends Controller
 {
     public function index()
@@ -28,7 +32,7 @@ class UserTicketController extends Controller
         $request->validate([
             'title' => 'required|min:10|max:255',
             'description' => 'required|min:10',
-            'priority' => 'required|in:low,medium,high,urgent',
+            'priority' => ['required', new Enum(TicketPriority::class)],
             'category_id' => 'required|exists:categories,id'
         ]);
 
@@ -56,9 +60,9 @@ class UserTicketController extends Controller
 
         if (Auth()->user()->id != $ticket->user_id){
             if (empty($ticket->assignee_id)){ $ticket->assignee_id = Auth()->user()->id; }
-            $ticket->status = 'answered';
+            $ticket->status = TicketStatus::ANSWERED;
         }else{
-            $ticket->status = 'open';
+            $ticket->status = TicketStatus::OPEN;
         }
         $ticket->save();
 
@@ -76,7 +80,7 @@ class UserTicketController extends Controller
         $ticket = Ticket::findOrFail($id);
         $this->authorize('close', $ticket);
 
-        $ticket->status = "closed";
+        $ticket->status = TicketStatus::CLOSED;
         $ticket->save();
         return redirect()->route('user.tickets.show', $ticket->id)->with('success', 'Ticket cerrado.');
 

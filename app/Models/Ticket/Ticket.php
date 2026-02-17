@@ -2,61 +2,48 @@
 
 namespace App\Models\Ticket;
 
+use App\Enums\TicketPriority;
+use App\Enums\TicketStatus;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\User;
 
 class Ticket extends Model
 {
     use SoftDeletes;
-    protected $fillable = ['title', 'description', 'status', 'priority','category_id','user_id','assignee_id'];
+
+    protected $fillable = ['title', 'description', 'status', 'priority', 'category_id', 'user_id', 'assignee_id'];
+
+    protected $casts = [
+        'status' => TicketStatus::class,
+        'priority' => TicketPriority::class,
+    ];
 
     public function getDescriptionShortAttribute(): string
     {
-        return substr($this->description, 0, 50). ( strlen($this->description) > 50 ? "..." : null );
+        return substr($this->description, 0, 50).(strlen($this->description) > 50 ? '...' : null);
     }
+
     public function getPriorityLabelAttribute(): string
     {
-        return match($this->priority) {
-            'low' => 'Baja',
-            'medium' => 'Media',
-            'high' => 'Alta',
-            'urgent' => 'Urgente',
-            default => 'Desconocido'
-        };
+        return $this->priority->label();
     }
+
     public function getStatusColorAttribute(): string
     {
-        return match($this->status) {
-            'open' => 'info',
-            'in progress' => 'warning',
-            'answered' => 'warning',
-            'closed' => 'danger',
-            default => 'secondary'
-        };
+        return $this->status->color();
     }
+
     public function getPriorityColorAttribute(): string
     {
-        return match($this->priority) {
-            'low' => 'info',
-            'medium' => 'primary',
-            'high' => 'warning',
-            'urgent' => 'danger',
-            default => 'secondary'
-        };
+        return $this->priority->color();
     }
 
     public function getStatusLabelAttribute(): string
     {
-        return match($this->status){
-            'open' => 'Abierto',
-            'in progress' => 'En proceso',
-            'answered' => 'Respondido',
-            'closed' => 'Cerrado',
-            default => 'Desconocido'
-        };
+        return $this->status->label();
     }
 
     public function user(): BelongsTo
@@ -71,11 +58,14 @@ class Ticket extends Model
 
     public function isClosed(): bool
     {
-        return $this->status === 'closed';
+        return $this->status === TicketStatus::CLOSED;
     }
-    public function category(): BelongsTo {
+
+    public function category(): BelongsTo
+    {
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
+
     public function assignee(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assignee_id', 'id');
