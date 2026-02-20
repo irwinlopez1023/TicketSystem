@@ -7,6 +7,8 @@ use App\Models\Ticket\Category;
 use App\Models\Ticket\TicketReply;
 use Illuminate\Http\Request;
 use App\Models\Ticket\Ticket;
+use App\Enums\Enums\Tickets\TicketStatus;
+use App\Enums\Enums\Tickets\TicketPriority;
 class UserTicketController extends Controller
 {
     public function index()
@@ -56,9 +58,9 @@ class UserTicketController extends Controller
 
         if (Auth()->user()->id != $ticket->user_id){
             if (empty($ticket->assignee_id)){ $ticket->assignee_id = Auth()->user()->id; }
-            $ticket->status = 'answered';
+            $ticket->status = TicketStatus::IN_PROGRESS;
         }else{
-            $ticket->status = 'open';
+            $ticket->status = TicketStatus::OPEN;
         }
         $ticket->save();
 
@@ -76,7 +78,7 @@ class UserTicketController extends Controller
         $ticket = Ticket::findOrFail($id);
         $this->authorize('close', $ticket);
 
-        $ticket->status = "closed";
+        $ticket->status = TicketStatus::CLOSED;
         $ticket->save();
         return redirect()->route('user.tickets.show', $ticket->id)->with('success', 'Ticket cerrado.');
 

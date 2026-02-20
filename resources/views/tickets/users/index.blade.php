@@ -19,8 +19,8 @@
             <tr>
                 <td><a href="{{ route('user.tickets.show', $ticket->id) }}">{{ $ticket->title }}</a></td>
                 <td>{{ $ticket->description_short }}</td>
-                <td><x-badge :text="$ticket->status_label" :color="$ticket->status_color"></x-badge></td>
-                <td><x-badge :text="$ticket->priority_label" :color="$ticket->priority_color" /></td>
+                <td><x-badge :text="$ticket->status->label()" :color="$ticket->status->color()"></x-badge></td>
+                <td><x-badge :text="$ticket->priority->label()" :color="$ticket->priority->color()" /></td>
                 <td>{{ $ticket->created_at->diffForHumans() }}</td>
             </tr>
            @if($loop->last)

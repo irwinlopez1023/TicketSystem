@@ -3,7 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Ticket\Ticket;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -39,6 +42,10 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class,'user_id');
+    }
     protected function casts(): array
     {
         return [

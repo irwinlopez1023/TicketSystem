@@ -1,7 +1,9 @@
 <x-bootstrap>
     <div class="container mt-4">
     <div class="row justify-content-center">
-        <div class="col-lg-10">
+
+
+        <div class="col-lg-8">
             <x-alert-session-success />
             <x-alert-errors />
             <div class="card shadow-sm mb-3">
@@ -29,12 +31,12 @@
                 </div>
             </div>
             <div class="card mb-4 shadow-sm">
-                <div class="card-header bg-light">
+                <div class="card-header bg-color">
                     <strong>Ticket # {{ $ticket->id }}</strong>
                 </div>
-                <div class="card-body">
+                <div class="card-body" id="chat-body" style="max-height: 400px; overflow-y: auto;">
                     <div class="d-flex mb-3 ">
-                        <div class="p-3 rounded bg-light border" style="max-width: 75%;">
+                        <div class="p-3 rounded bg-color border" style="max-width: 75%;">
                             <div class="small mb-1 text-muted">
                                 <i class="bi bi-person"></i> {{ $ticket->user->name }}
                                 <span class="ms-2"> <i class="bi bi-clock"></i> {{ $ticket->created_at->diffForHumans() }} </span>
@@ -46,7 +48,7 @@
                     </div>
                     @forelse ($ticket->replies as $reply)
                         <div class="d-flex mb-3 {{ $reply->isFromTicketOwner() ? '' : 'justify-content-end' }}">
-                            <div class="p-3 rounded {{ $reply->isFromTicketOwner() ? 'bg-light border' : 'bg-primary text-white' }}" style="max-width: 75%;">
+                            <div class="p-3 rounded {{ $reply->isFromTicketOwner() ? 'bg-color border' : 'bg-primary text-white' }}" style="max-width: 75%;">
                                 <div class="small mb-1 {{ $reply->isFromTicketOwner() ? 'text-muted' : 'text-white-50' }}">
                                     <i class="bi bi-person"></i>
                                     {{ $reply->user->name }}
@@ -74,7 +76,7 @@
                 @endcannot
                     @can('reply', $ticket)
                         <div class="card shadow-sm">
-                            <div class="card-header bg-light">
+                            <div class="card-header bg-color">
                                 <strong>Responder</strong>
                             </div>
                             <div class="card-body">
@@ -99,6 +101,29 @@
                 @endcan
             @endif
         </div>
+
+        @can('tickets.view.all')
+            <div class="col-lg-4">
+                <div class="card shadow-sm mb-3">
+                    <div class="card-header bg-color">
+                        <h5>Información del usuario.</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Nombre: {{ $ticket->user->name }}</p>
+                        <p>Email: <a href="mailto:{{$ticket->user->email}}" alt="Enviar correo"> {{ $ticket->user->email }}</a></p>
+                        <p>Categoría: {{ $ticket->category->name }}</p>
+                    </div>
+                </div>
+            </div>
+        @endcan
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var chatBody = document.getElementById('chat-body');
+        if (chatBody) {
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+    });
+</script>
 </x-bootstrap>

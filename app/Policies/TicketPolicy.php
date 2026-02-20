@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\Ticket\Ticket;
+use App\Enums\Enums\Tickets\TicketStatus;
 class TicketPolicy
 {
     /**
@@ -23,16 +24,15 @@ class TicketPolicy
     public function create(User $user){
         return $user->can('tickets.create');
     }
-    public function store(User $user)
-    {
-        return $user->can('tickets.create');
-    }
     public function reply(User $user, Ticket $ticket)
     {
         if (!$user->can('tickets.reply') || $ticket->isClosed()) return false;
         if ($user->can('tickets.view.all')) return true;
-        if ($ticket->user_id !== $user->id || $ticket->status === "open") return false;
-        return true;
+        if ($ticket->user_id !== $user->id) return false;
+        if ($ticket->status !== TicketStatus::OPEN) return true;
+       $replies = $ticket->replies()->latest('created_at')->take(3)->get();
+       return ($replies->where('user_id', $user->id)->count() < 3 );
+
     }
 
     public function close(User $user, Ticket $ticket)
