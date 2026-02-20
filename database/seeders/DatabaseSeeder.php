@@ -9,6 +9,7 @@ use Database\Seeders\Ticket\DepartmentSeeder;
 use Database\Seeders\User\UserSeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Console\Command;
 
 class DatabaseSeeder extends Seeder
 {
@@ -55,12 +56,17 @@ class DatabaseSeeder extends Seeder
         ]);
 
         if(config('app.env') === "local") {
-            $this->callWith(DepartmentSeeder::class,[
-                'departments' => $departments
-            ]);
-            $this->callWith(UserSeeder::class,[
-                'departments' => $departments
-            ]);
+            $confirm = $this->command->confirm("Estas por crear usuarios de prueba, confirma la acción con Y: ",true);
+            if ($confirm){
+                $this->callWith(DepartmentSeeder::class,[
+                    'departments' => $departments
+                ]);
+                $this->callWith(UserSeeder::class,[
+                    'departments' => $departments
+                ]);
+            }else{
+                $this->command->warn('Creacion de usuarios concelado por el administrador.');
+            }
         }
 
 
@@ -69,7 +75,7 @@ class DatabaseSeeder extends Seeder
 
 
     }catch (\Exception $exception){
-        print("Database seeding failed: {$exception->getMessage()}");
+        $this->command->error("Database seeding failed: {$exception->getMessage()}");
     }
 
     }

@@ -2,7 +2,10 @@
 
 namespace App\Models\Ticket;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @property int $id
@@ -21,11 +24,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Department whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Department withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Department withoutTrashed()
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $users
+ * @property-read int|null $users_count
  * @mixin \Eloquent
  */
 class Department extends Model
 {
     use SoftDeletes;
     protected $fillable = ['name'];
+
+    public function users(): HasMany
+    {
+        return $this->HasMany(User::class, 'department_id');
+    }
 
 }

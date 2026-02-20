@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
+use Illuminate\Support\Str;
 
 /**
  * @property int $id
@@ -45,6 +46,7 @@ use App\Models\User;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Ticket whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Ticket withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Ticket withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ticket whereDepartmentId($value)
  * @mixin \Eloquent
  */
 class Ticket extends Model
@@ -57,7 +59,7 @@ class Ticket extends Model
     ];
     public function getDescriptionShortAttribute(): string
     {
-        return substr($this->description, 0, 50). ( strlen($this->description) > 50 ? "..." : null );
+        return Str::limit($this->description, 50);
     }
 
     public function user(): BelongsTo
